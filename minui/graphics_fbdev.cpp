@@ -143,6 +143,7 @@ static GRSurface* fbdev_init(minui_backend* backend) {
     memset(gr_framebuffer[0].data, 0, gr_framebuffer[0].height * gr_framebuffer[0].row_bytes);
 
     /* check if we can use double buffering */
+#ifndef RECOVERY_GRAPHICS_FORCE_SINGLE_BUFFER
     if (vi.yres * fi.line_length * 2 <= fi.smem_len) {
         double_buffered = true;
 
@@ -153,6 +154,9 @@ static GRSurface* fbdev_init(minui_backend* backend) {
         gr_draw = gr_framebuffer+1;
 
     } else {
+#else
+    {
+#endif
         double_buffered = false;
 
         // Without double-buffering, we allocate RAM for a buffer to
